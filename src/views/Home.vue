@@ -7,7 +7,6 @@
         <button @click="carryDay()">Carry over</button>
       </div>
       <div id="board">
-        <!--<Day v-for="(day, idx) in todo" v-bind:key="idx" v-model:day="todo[idx]" />-->
         <Day
           v-for="(day, idx) in todo"
           :key="idx"
@@ -25,23 +24,35 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Day from "@/components/Day.vue";
+import DayComponent from "@/components/Day.vue";
 import _ from "lodash";
+
+interface Task {
+  state: boolean,
+  name: string,
+};
+
+interface Day {
+  date: string,
+  tasks: Task[],
+};
 
 export default defineComponent({
   name: "Home",
   components: {
-    Day,
+    DayComponent,
   },
   data() {
     return {
-      todo: [], // todo is a array of day JSON objects
+      todo: [] as Day[], // todo is a array of day JSON objects
     };
   },
   created() {
     // for debugging
-    if (localStorage.getItem("todo") === null) {
-      localStorage.setItem("todo", JSON.stringify([
+    let savedState: string | null = localStorage.getItem("todo");
+    let data: Day[];
+    if (savedState === null) {
+      data = [
         {
           date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
           tasks: [
@@ -49,12 +60,14 @@ export default defineComponent({
             { state: false, name: "sr ws" },
           ]
         },
-      ]));
+      ];
+      //localStorage.setItem("todo", JSON.stringify());
+    } else {
+      console.log("No saved data. Loaded default test data.");
+      data = JSON.parse(savedState);
     }
 
-    let data = JSON.parse(localStorage.getItem("todo"));
     console.log("todo data %o", data);
-
     this.todo = data;
   },
   watch: {
@@ -76,23 +89,23 @@ export default defineComponent({
     carryDay() {
       this.todo.unshift(_.cloneDeep(this.todo[0]));
     },
-    removeDay(idx) {
+    removeDay(idx: number) {
       this.todo.splice(idx, 1);
     },
-    updateDate(idx, evt) {
+    updateDate(idx: number, evt: any) { // FIXME shouldn't use any
       this.todo[idx].date = evt;
       this.todo.splice(idx, 1, this.todo[idx]);
       console.log(this.todo);
     },
-    updateTasks(idx, evt) {
+    updateTasks(idx: number, evt: any) { // FIXME
       this.todo[idx].tasks[evt.idx][evt.prop] = evt.val;
       this.todo.splice(idx, 1, this.todo[idx]);
       console.log(this.todo);
     },
-    addTask(idx) {
+    addTask(idx: number) {
       this.todo[idx].tasks.push({ state: false, name: "" });
     },
-    removeTask(idx, i2) {
+    removeTask(idx: number, i2: number) {
       this.todo[idx].tasks.splice(i2, 1);
     },
     saveData() {

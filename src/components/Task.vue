@@ -23,17 +23,12 @@ import { defineComponent } from "vue";
 export default defineComponent({
   name: "Task",
   props: {
-    task: JSON,
+    task: Object,
   },
   created() {
     //console.log(this.task);
   },
-  methods: {
-    changed(evt) {
-      console.log(evt);
-      this.$emit('input', evt.value)
-    }
-  }
+  methods: {}
 });
 </script>
 

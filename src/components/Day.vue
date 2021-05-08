@@ -32,7 +32,7 @@ export default defineComponent({
     Task,
   },
   props: {
-    day: JSON,
+    day: Object,
   },
   created() {
     console.log("this.day", this.day);
