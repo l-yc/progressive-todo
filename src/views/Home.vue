@@ -26,7 +26,6 @@
 import { defineComponent } from "vue";
 import DayComponent from "@/components/Day.vue";
 import _ from "lodash";
-import { Day } from "@/types.ts";
 
 export default defineComponent({
   name: "Home",
@@ -34,60 +33,12 @@ export default defineComponent({
     DayComponent,
   },
   data() {
-    return {
-      todo: [] as Day[], // todo is a array of day JSON objects
-    };
+    return {};
   },
   created() {
-    this.$store.commit("load")
-    this.todo = this.$store.getters.todos;
-    console.log("loaded", this.todo);
+    this.$store.commit("load");
   },
-  watch: {
-    todo: {
-      handler(newVal, oldVal) {
-        console.log("watching", newVal, oldVal);
-        //_.debounce(this.saveData, 500)();
-      },
-      deep: true,
-    },
-  },
-  methods: {
-    addDay() {
-      this.todo.unshift({
-        date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
-        tasks: [{ state: false, name: "" }],
-      });
-    },
-    carryDay() {
-      this.todo.unshift(_.cloneDeep(this.todo[0]));
-    },
-    removeDay(idx: number) {
-      this.todo.splice(idx, 1);
-    },
-    updateDate(idx: number, evt: any) {
-      // FIXME shouldn't use any
-      this.todo[idx].date = evt;
-      this.todo.splice(idx, 1, this.todo[idx]);
-      console.log(this.todo);
-    },
-    updateTasks(idx: number, evt: any) {
-      // FIXME
-      this.todo[idx].tasks[evt.idx][evt.prop] = evt.val;
-      this.todo.splice(idx, 1, this.todo[idx]);
-      console.log(this.todo);
-    },
-    addTask(idx: number) {
-      this.todo[idx].tasks.push({ state: false, name: "" });
-    },
-    removeTask(idx: number, i2: number) {
-      this.todo[idx].tasks.splice(i2, 1);
-    },
-    saveData() {
-      console.log("saving", JSON.stringify(this.todo));
-      localStorage.setItem("todo", JSON.stringify(this.todo));
-    },
-  },
+  methods: {},
 });
 </script>
 
