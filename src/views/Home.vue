@@ -7,7 +7,7 @@
         <button @click="carryDay()">Carry over</button>
       </div>
       <div id="board">
-        <Day
+        <DayComponent
           v-for="(day, idx) in todo"
           :key="idx"
           :day="day"
@@ -26,16 +26,7 @@
 import { defineComponent } from "vue";
 import DayComponent from "@/components/Day.vue";
 import _ from "lodash";
-
-interface Task {
-  state: boolean,
-  name: string,
-};
-
-interface Day {
-  date: string,
-  tasks: Task[],
-};
+import { Day } from "@/types.ts";
 
 export default defineComponent({
   name: "Home",

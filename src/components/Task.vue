@@ -19,16 +19,14 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
+import { Task } from "@/types.ts";
 
 export default defineComponent({
   name: "Task",
   props: {
-    task: Object,
+    task: Task,
   },
-  created() {
-    //console.log(this.task);
-  },
-  methods: {}
+  methods: {},
 });
 </script>
 

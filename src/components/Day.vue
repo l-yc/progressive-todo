@@ -6,7 +6,7 @@
       @input="$emit('update:day-date', $event.target.value)"
     />
     <div class="tasks">
-      <Task
+      <TaskComponent
         v-for="(task, idx) in day.tasks"
         :key="idx"
         :task="task"
@@ -24,15 +24,16 @@
 
 <script lang="ts">
 import { defineComponent } from "vue";
-import Task from "@/components/Task.vue";
+import TaskComponent from "@/components/Task.vue";
+import { Day } from "@/types.ts";
 
 export default defineComponent({
   name: "Day",
   components: {
-    Task,
+    TaskComponent,
   },
   props: {
-    day: Object,
+    day: Day,
   },
   created() {
     console.log("this.day", this.day);
