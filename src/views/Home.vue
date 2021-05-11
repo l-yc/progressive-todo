@@ -16,7 +16,7 @@
           @update:day-tasks="updateTasks(idx, $event)"
           @add:day-tasks="addTask(idx)"
           @remove:day-tasks="removeTask(idx, $event)"
-         />
+        />
       </div>
     </div>
   </div>
@@ -49,7 +49,7 @@ export default defineComponent({
           tasks: [
             { state: false, name: "thdy ws" },
             { state: false, name: "sr ws" },
-          ]
+          ],
         },
       ];
       //localStorage.setItem("todo", JSON.stringify());
@@ -68,7 +68,7 @@ export default defineComponent({
         _.debounce(this.saveData, 500)();
       },
       deep: true,
-    }
+    },
   },
   methods: {
     addDay() {
@@ -83,12 +83,14 @@ export default defineComponent({
     removeDay(idx: number) {
       this.todo.splice(idx, 1);
     },
-    updateDate(idx: number, evt: any) { // FIXME shouldn't use any
+    updateDate(idx: number, evt: any) {
+      // FIXME shouldn't use any
       this.todo[idx].date = evt;
       this.todo.splice(idx, 1, this.todo[idx]);
       console.log(this.todo);
     },
-    updateTasks(idx: number, evt: any) { // FIXME
+    updateTasks(idx: number, evt: any) {
+      // FIXME
       this.todo[idx].tasks[evt.idx][evt.prop] = evt.val;
       this.todo.splice(idx, 1, this.todo[idx]);
       console.log(this.todo);
@@ -102,7 +104,7 @@ export default defineComponent({
     saveData() {
       console.log("saving", JSON.stringify(this.todo));
       localStorage.setItem("todo", JSON.stringify(this.todo));
-    }
+    },
   },
 });
 </script>

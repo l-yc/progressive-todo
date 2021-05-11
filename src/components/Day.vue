@@ -10,8 +10,12 @@
         v-for="(task, idx) in day.tasks"
         :key="idx"
         :task="task"
-        @update:task-state="$emit('update:day-tasks', { idx, prop: 'state', val: $event })"
-        @update:task-name="$emit('update:day-tasks', { idx, prop: 'name', val: $event })"
+        @update:task-state="
+          $emit('update:day-tasks', { idx, prop: 'state', val: $event })
+        "
+        @update:task-name="
+          $emit('update:day-tasks', { idx, prop: 'name', val: $event })
+        "
         @remove:task="$emit('remove:day-tasks', idx)"
       />
       <div class="controls flex-row justify-center">
@@ -37,13 +41,12 @@ export default defineComponent({
   },
   created() {
     console.log("this.day", this.day);
-  }
+  },
 });
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
 .day {
   box-shadow: 0 0 1.6px 0.4px #ccc;
   padding: 2rem 4rem;
@@ -53,5 +56,4 @@ export default defineComponent({
 .day .controls button {
   margin: 1rem 1rem 0 0;
 }
-
 </style>

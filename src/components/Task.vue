@@ -32,7 +32,6 @@ export default defineComponent({
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
-
 .task {
   position: relative;
 
@@ -67,7 +66,7 @@ export default defineComponent({
   border: none;
   border-bottom: 2px solid #fff0;
   margin-bottom: 0;
-  padding: .5rem;
+  padding: 0.5rem;
   line-height: 1rem;
 
   &:focus,
@@ -77,5 +76,4 @@ export default defineComponent({
     box-shadow: none;
   }
 }
-
 </style>
