@@ -7,7 +7,7 @@ import { TodoList, Day, Task } from "@/types.ts";
 
 const store = createStore({
   state: {
-    todo: {} as TodoList,
+    todo: undefined,
   },
 
   getters: {
@@ -23,7 +23,7 @@ const store = createStore({
       let data: TodoList;
       if (savedState === null) {
         data = {
-          name: "name",
+          name: "default",
           days: [
             {
               id: uuidv4(),
@@ -41,21 +41,24 @@ const store = createStore({
       }
 
       console.log("todo data %o", data);
-      state.todo = data;
+      state.todo = new TodoList(data);
     },
 
     addDay(state) {
-      state.todo.days.unshift({
+      state.todo.days.unshift(new Day({
         id: uuidv4(),
         date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
-        tasks: [{ id: uuidv4(), state: false, name: "" }],
-      });
+        tasks: [ new Task({ id: uuidv4(), state: false, name: "" }) ],
+      }));
     },
 
     carryDay(state) {
-      const clone: Day = _.cloneDeep(state.todo.days[0]);
-      clone.id = uuidv4()
-      clone.date = new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
+      const orig: Day = state.todo.days[0];
+      let clone: Day = new Day({
+        id: uuidv4(),
+        date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
+        tasks: _.deepClone(state.todo.days[0].tasks),
+      })
       state.todo.days.unshift(clone);
     },
 
@@ -69,17 +72,25 @@ const store = createStore({
     },
 
     addTask(state, evt) {
-      state.todo.getDay(evt.day).tasks.push({
+      state.todo.getDay(evt.day).tasks.push(new Task({
         id: uuidv4(),
         state: false,
         name: "",
-      });
+      }));
     },
 
     removeTask(state, evt) {
+      console.log('evt', evt);
       const day: Day = state.todo.getDay(evt.day);
       const idx: number = day.tasks.findIndex((t) => t.id == evt.task);
       day.tasks.splice(idx, 1);
+    },
+
+    reorderTask(state, evt) {
+      const day: Day = state.todo.getDay(evt.day);
+      const task: Task = day.tasks[evt.oldIndex];
+      day.tasks.splice(evt.oldIndex, 1);
+      day.tasks.splice(evt.newIndex, 0, task);
     },
 
     updateTaskState(state, evt) {
@@ -89,6 +100,7 @@ const store = createStore({
     },
 
     updateTaskName(state, evt) {
+      console.log(state.todo);
       const day: Day = state.todo.getDay(evt.day);
       const task: Task = day.getTask(evt.task);
       task.name = evt.val;

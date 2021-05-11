@@ -38,6 +38,7 @@ import { Task } from "@/types.ts";
 export default defineComponent({
   name: "Task",
   props: {
+    did: String,
     task: { type: Object as () => Task },
   },
   methods: {},

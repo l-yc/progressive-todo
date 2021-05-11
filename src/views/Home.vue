@@ -8,7 +8,7 @@
       </div>
       <div id="board">
         <DayComponent
-          v-for="(day, idx) in $store.getters.todo.days"
+          v-for="day in $store.getters.todo.days"
           :key="day.id"
           :day="day"
         />

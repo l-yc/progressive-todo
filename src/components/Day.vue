@@ -10,10 +10,9 @@
     <div class="tasks">
       <div ref="taskContainer">
         <TaskComponent
-          v-for="(task, idx) in day.tasks"
-          :key="idx"
-          :did="id"
-          :id="idx"
+          v-for="task in day.tasks"
+          :key="task.id"
+          :did="day.id"
           :task="task"
         />
       </div>
@@ -67,6 +66,15 @@ export default defineComponent({
   },
 
   mounted() {
+    let sortable = Sortable.create(this.$refs.taskContainer, {
+      onChange: (evt) => {
+        this.$store.commit('reorderTask', {
+          day: this.day.id,
+          oldIndex: evt.oldIndex,
+          newIndex: evt.newIndex,
+        });
+      },
+    });
   },
 
   methods: {
