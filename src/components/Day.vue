@@ -33,7 +33,7 @@ export default defineComponent({
   },
   props: {
     id: { type: Number },
-    day: { type: Number },
+    day: { type: Day },
   },
   created() {
     console.log("this.day", this.day);

@@ -2,11 +2,11 @@ import { createStore } from "vuex";
 
 import _ from "lodash";
 
-import { Day } from "@/types.ts";
+import { TodoList, Day, Task } from "@/types.ts";
 
 const store = createStore({
   state: {
-    todo: [] as Day[], // todo is a array of day JSON objects
+    todo: { type: TodoList },
   },
 
   getters: {
@@ -20,27 +20,27 @@ const store = createStore({
     load: (state) => {
       // for debugging
       const savedState: string | null = localStorage.getItem("todo");
-      let data: Day[];
+      let data: any;
       if (savedState === null) {
-        data = [
-          {
-            date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
-            tasks: [
-              { state: false, name: "thdy ws" },
-              { state: false, name: "sr ws" },
-            ],
-          },
-        ];
-        //localStorage.setItem("todo", JSON.stringify());
+        data = {
+          name: "name",
+          days: [
+            {
+              date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
+              tasks: [
+                { state: false, name: "thdy ws" },
+                { state: false, name: "sr ws" },
+              ],
+            },
+          ]
+        };
       } else {
         console.log("No saved data. Loaded default test data.");
         data = JSON.parse(savedState);
       }
 
       console.log("todo data %o", data);
-      for (let a of data) {
-        state.todo.push(a);
-      }
+      state.todo = new TodoList(data);
     },
 
     addDay(state) {
@@ -88,7 +88,7 @@ const store = createStore({
 });
 
 store.subscribe((mutation, state) => {
-  _.debounce(() => store.dispatch('saveData'), 500)();
+  //_.debounce(() => store.dispatch('saveData'), 500)();
 })
 
 export default store;
