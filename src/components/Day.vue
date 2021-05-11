@@ -3,7 +3,9 @@
     <input
       type="date"
       :value="day.date"
-      @input="$store.commit('updateDayDate', { day: id, val: $event.target.value })"
+      @input="
+        $store.commit('updateDayDate', { day: id, val: $event.target.value })
+      "
     />
     <div class="tasks">
       <TaskComponent
@@ -33,7 +35,7 @@ export default defineComponent({
   },
   props: {
     id: { type: Number },
-    day: { type: Day },
+    day: { type: Object as () => Day },
   },
   created() {
     console.log("this.day", this.day);

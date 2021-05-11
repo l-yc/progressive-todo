@@ -2,11 +2,11 @@ import { createStore } from "vuex";
 
 import _ from "lodash";
 
-import { TodoList, Day, Task } from "@/types.ts";
+import { TodoList } from "@/types.ts";
 
 const store = createStore({
   state: {
-    todo: { type: TodoList },
+    todo: {} as TodoList,
   },
 
   getters: {
@@ -16,11 +16,10 @@ const store = createStore({
   },
 
   mutations: {
-
     load: (state) => {
       // for debugging
       const savedState: string | null = localStorage.getItem("todo");
-      let data: any;
+      let data: TodoList;
       if (savedState === null) {
         data = {
           name: "name",
@@ -32,7 +31,7 @@ const store = createStore({
                 { state: false, name: "sr ws" },
               ],
             },
-          ]
+          ],
         };
       } else {
         console.log("No saved data. Loaded default test data.");
@@ -40,42 +39,42 @@ const store = createStore({
       }
 
       console.log("todo data %o", data);
-      state.todo = new TodoList(data);
+      state.todo = data;
     },
 
     addDay(state) {
-      state.todo.unshift({
+      state.todo.days.unshift({
         date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
         tasks: [{ state: false, name: "" }],
       });
     },
 
     carryDay(state) {
-      state.todo.unshift(_.cloneDeep(state.todo[0]));
+      state.todo.days.unshift(_.cloneDeep(state.todo.days[0]));
     },
 
     removeDay(state, evt) {
-      state.todo.splice(evt.day, 1);
+      state.todo.days.splice(evt.day, 1);
     },
 
     updateDayDate(state, evt) {
-      state.todo[evt.day].date = evt.newVal;
+      state.todo.days[evt.day].date = evt.newVal;
     },
 
     addTask(state, evt) {
-      state.todo[evt.day].tasks.push({ state: false, name: "" });
+      state.todo.days[evt.day].tasks.push({ state: false, name: "" });
     },
 
     removeTask(state, evt) {
-      state.todo[evt.day].tasks.splice(evt.task, 1);
+      state.todo.days[evt.day].tasks.splice(evt.task, 1);
     },
 
     updateTaskState(state, evt) {
-      state.todo[evt.day].tasks[evt.task].state = evt.val;
+      state.todo.days[evt.day].tasks[evt.task].state = evt.val;
     },
 
     updateTaskName(state, evt) {
-      state.todo[evt.day].tasks[evt.task].name = evt.val;
+      state.todo.days[evt.day].tasks[evt.task].name = evt.val;
     },
   },
 
@@ -84,11 +83,11 @@ const store = createStore({
       console.log("saving", JSON.stringify(context.getters.todo));
       localStorage.setItem("todo", JSON.stringify(context.getters.todo));
     },
-  }
+  },
 });
 
-store.subscribe((mutation, state) => {
-  //_.debounce(() => store.dispatch('saveData'), 500)();
-})
+store.subscribe((_mutation, _state) => {
+  _.debounce(() => store.dispatch("saveData"), 500)();
+});
 
 export default store;
