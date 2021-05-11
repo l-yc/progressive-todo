@@ -25,9 +25,9 @@
         })
       "
     />
-    <span @click="$store.commit('removeTask', { day: did, task: id })"
-      >&times;</span
-    >
+    <span @click="$store.commit('removeTask', { day: did, task: id })">
+      &times;
+    </span>
   </div>
 </template>
 
