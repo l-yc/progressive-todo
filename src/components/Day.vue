@@ -18,8 +18,12 @@
       </div>
       <div class="controls flex-row justify-center">
         <button @click="$store.commit('addTask', { day: day.id })">New</button>
-        <button @click="$store.commit('removeDay', { day: day.id })">Delete</button>
-        <button @click="startRound()" :disabled="currentTask != -1">Start</button>
+        <button @click="$store.commit('removeDay', { day: day.id })">
+          Delete
+        </button>
+        <button @click="startRound()" :disabled="currentTask != -1">
+          Start
+        </button>
       </div>
       <div class="message">
         {{ message }}
@@ -33,7 +37,7 @@ import { defineComponent } from "vue";
 import TaskComponent from "@/components/Task.vue";
 import { Day, Task } from "@/types.ts";
 import _ from "lodash";
-import Sortable from 'sortablejs';
+import Sortable from "sortablejs";
 
 export default defineComponent({
   name: "Day",
@@ -42,7 +46,7 @@ export default defineComponent({
   },
 
   props: {
-    day: { type: Object as () => Day },
+    day: { type: Object as () => Day, required: true },
   },
 
   data() {
@@ -66,9 +70,10 @@ export default defineComponent({
   },
 
   mounted() {
-    let sortable = Sortable.create(this.$refs.taskContainer, {
+    let el: HTMLElement = this.$refs.taskContainer as HTMLElement;
+    Sortable.create(el, {
       onChange: (evt) => {
-        this.$store.commit('reorderTask', {
+        this.$store.commit("reorderTask", {
           day: this.day.id,
           oldIndex: evt.oldIndex,
           newIndex: evt.newIndex,
@@ -79,7 +84,9 @@ export default defineComponent({
 
   methods: {
     startRound() {
-      let result: boolean = window.confirm("Are you sure you want to begin this round of scheduling?");
+      let result: boolean = window.confirm(
+        "Are you sure you want to begin this round of scheduling?"
+      );
       if (result) {
         ++this.round;
         this.schedule();
@@ -87,11 +94,11 @@ export default defineComponent({
     },
 
     schedule() {
-      let pool: Task[] = this.day.tasks.filter(t => !t.state);
+      let pool: Task[] = this.day.tasks.filter((t) => !t.state);
       if (pool.length === 0) {
         this.endRound();
       } else {
-        let task: number = _.random(0, pool.length-1);
+        let task: number = _.random(0, pool.length - 1);
         this.message = `Round ${this.round}: ${pool[task].name}`;
         this.currentTask = task;
       }
@@ -100,8 +107,8 @@ export default defineComponent({
     endRound() {
       this.message = `Round ${this.round} ended. Good job!`;
       this.currentTask = -1;
-    }
-  }
+    },
+  },
 });
 </script>
 

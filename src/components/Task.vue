@@ -39,7 +39,7 @@ export default defineComponent({
   name: "Task",
   props: {
     did: String,
-    task: { type: Object as () => Task },
+    task: { type: Object as () => Task, required: true },
   },
   methods: {},
 });

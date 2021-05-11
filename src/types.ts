@@ -11,7 +11,7 @@ class TodoList {
   }
 
   public getDay(id: string): Day {
-    const idx: number = this.days.findIndex(d => d.id == id);
+    const idx: number = this.days.findIndex((d) => d.id == id);
     return this.days[idx];
   }
 }
@@ -31,7 +31,7 @@ class Day {
   }
 
   public getTask(id: string): Task {
-    const idx: number = this.tasks.findIndex(d => d.id == id);
+    const idx: number = this.tasks.findIndex((d) => d.id == id);
     return this.tasks[idx];
   }
 }

@@ -29,9 +29,6 @@ export default defineComponent({
   data() {
     return {};
   },
-  created() {
-    this.$store.commit("load");
-  },
   methods: {},
 });
 </script>
