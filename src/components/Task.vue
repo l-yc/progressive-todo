@@ -8,7 +8,7 @@
       @change="
         $store.commit('updateTaskState', {
           day: did,
-          task: id,
+          task: task.id,
           val: $event.target.checked,
         })
       "
@@ -20,12 +20,12 @@
       @input="
         $store.commit('updateTaskName', {
           day: did,
-          task: id,
+          task: task.id,
           val: $event.target.value,
         })
       "
     />
-    <span @click="$store.commit('removeTask', { day: did, task: id })">
+    <span @click="$store.commit('removeTask', { day: did, task: task.id })">
       &times;
     </span>
   </div>
@@ -38,8 +38,6 @@ import { Task } from "@/types.ts";
 export default defineComponent({
   name: "Task",
   props: {
-    did: { type: Number },
-    id: { type: Number },
     task: { type: Object as () => Task },
   },
   methods: {},

@@ -8,16 +8,18 @@
       "
     />
     <div class="tasks">
-      <TaskComponent
-        v-for="(task, idx) in day.tasks"
-        :key="idx"
-        :did="id"
-        :id="idx"
-        :task="task"
-      />
+      <div ref="taskContainer">
+        <TaskComponent
+          v-for="(task, idx) in day.tasks"
+          :key="idx"
+          :did="id"
+          :id="idx"
+          :task="task"
+        />
+      </div>
       <div class="controls flex-row justify-center">
-        <button @click="$store.commit('addTask', { day: id })">New</button>
-        <button @click="$store.commit('removeDay', { day: id })">Delete</button>
+        <button @click="$store.commit('addTask', { day: day.id })">New</button>
+        <button @click="$store.commit('removeDay', { day: day.id })">Delete</button>
         <button @click="startRound()" :disabled="currentTask != -1">Start</button>
       </div>
       <div class="message">
@@ -32,6 +34,7 @@ import { defineComponent } from "vue";
 import TaskComponent from "@/components/Task.vue";
 import { Day, Task } from "@/types.ts";
 import _ from "lodash";
+import Sortable from 'sortablejs';
 
 export default defineComponent({
   name: "Day",
@@ -40,7 +43,6 @@ export default defineComponent({
   },
 
   props: {
-    id: { type: Number },
     day: { type: Object as () => Day },
   },
 
@@ -62,6 +64,9 @@ export default defineComponent({
         }
       },
     },
+  },
+
+  mounted() {
   },
 
   methods: {

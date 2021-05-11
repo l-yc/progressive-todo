@@ -1,8 +1,9 @@
 import { createStore } from "vuex";
 
 import _ from "lodash";
+import { v4 as uuidv4 } from 'uuid';
 
-import { TodoList } from "@/types.ts";
+import { TodoList, Day, Task } from "@/types.ts";
 
 const store = createStore({
   state: {
@@ -25,10 +26,11 @@ const store = createStore({
           name: "name",
           days: [
             {
+              id: uuidv4(),
               date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
               tasks: [
-                { state: false, name: "thdy ws" },
-                { state: false, name: "sr ws" },
+                { id: uuidv4(), state: false, name: "thdy ws" },
+                { id: uuidv4(), state: false, name: "sr ws" },
               ],
             },
           ],
@@ -44,37 +46,52 @@ const store = createStore({
 
     addDay(state) {
       state.todo.days.unshift({
+        id: uuidv4(),
         date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
-        tasks: [{ state: false, name: "" }],
+        tasks: [{ id: uuidv4(), state: false, name: "" }],
       });
     },
 
     carryDay(state) {
-      state.todo.days.unshift(_.cloneDeep(state.todo.days[0]));
+      const clone: Day = _.cloneDeep(state.todo.days[0]);
+      clone.id = uuidv4()
+      clone.date = new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
+      state.todo.days.unshift(clone);
     },
 
     removeDay(state, evt) {
-      state.todo.days.splice(evt.day, 1);
+      const idx: number = state.todo.days.findIndex(d => d.id == evt.day);
+      state.todo.days.splice(idx, 1);
     },
 
     updateDayDate(state, evt) {
-      state.todo.days[evt.day].date = evt.newVal;
+      state.todo.getDay(evt.day).date = evt.newVal;
     },
 
     addTask(state, evt) {
-      state.todo.days[evt.day].tasks.push({ state: false, name: "" });
+      state.todo.getDay(evt.day).tasks.push({
+        id: uuidv4(),
+        state: false,
+        name: "",
+      });
     },
 
     removeTask(state, evt) {
-      state.todo.days[evt.day].tasks.splice(evt.task, 1);
+      const day: Day = state.todo.getDay(evt.day);
+      const idx: number = day.tasks.findIndex((t) => t.id == evt.task);
+      day.tasks.splice(idx, 1);
     },
 
     updateTaskState(state, evt) {
-      state.todo.days[evt.day].tasks[evt.task].state = evt.val;
+      const day: Day = state.todo.getDay(evt.day);
+      const task: Task = day.getTask(evt.task);
+      task.state = evt.val;
     },
 
     updateTaskName(state, evt) {
-      state.todo.days[evt.day].tasks[evt.task].name = evt.val;
+      const day: Day = state.todo.getDay(evt.day);
+      const task: Task = day.getTask(evt.task);
+      task.name = evt.val;
     },
   },
 
