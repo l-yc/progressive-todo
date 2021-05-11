@@ -39,33 +39,15 @@ export default defineComponent({
     };
   },
   created() {
-    // for debugging
-    let savedState: string | null = localStorage.getItem("todo");
-    let data: Day[];
-    if (savedState === null) {
-      data = [
-        {
-          date: new Date().toLocaleDateString("en-CA"), // yyyy-mm-dd
-          tasks: [
-            { state: false, name: "thdy ws" },
-            { state: false, name: "sr ws" },
-          ],
-        },
-      ];
-      //localStorage.setItem("todo", JSON.stringify());
-    } else {
-      console.log("No saved data. Loaded default test data.");
-      data = JSON.parse(savedState);
-    }
-
-    console.log("todo data %o", data);
-    this.todo = data;
+    this.$store.commit("load")
+    this.todo = this.$store.getters.todos;
+    console.log("loaded", this.todo);
   },
   watch: {
     todo: {
       handler(newVal, oldVal) {
         console.log("watching", newVal, oldVal);
-        _.debounce(this.saveData, 500)();
+        //_.debounce(this.saveData, 500)();
       },
       deep: true,
     },
