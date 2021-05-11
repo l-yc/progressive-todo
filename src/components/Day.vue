@@ -3,7 +3,7 @@
     <input
       type="date"
       :value="day.date"
-      @input="$store.commit('updateDayDate', id, $event.target.value)"
+      @input="$store.commit('updateDayDate', { day: id, val: $event.target.value })"
     />
     <div class="tasks">
       <TaskComponent
@@ -14,8 +14,8 @@
         :task="task"
       />
       <div class="controls flex-row justify-center">
-        <button @click="$store.commit('addTask', id)">New</button>
-        <button @click="$store.commit('removeDay', id)">Delete</button>
+        <button @click="$store.commit('addTask', { day: id })">New</button>
+        <button @click="$store.commit('removeDay', { day: id })">Delete</button>
       </div>
     </div>
   </div>

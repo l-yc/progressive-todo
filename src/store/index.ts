@@ -13,17 +13,13 @@ const store = createStore({
     todo: (state) => {
       return state.todo;
     },
-
-    doneTodo: (state) => {
-      return state.todo.filter((t) => t.state);
-    },
   },
 
   mutations: {
 
     load: (state) => {
       // for debugging
-      let savedState: string | null = localStorage.getItem("todo");
+      const savedState: string | null = localStorage.getItem("todo");
       let data: Day[];
       if (savedState === null) {
         data = [
@@ -58,40 +54,41 @@ const store = createStore({
       state.todo.unshift(_.cloneDeep(state.todo[0]));
     },
 
-    removeDay(state, idx: number) {
-      state.todo.splice(idx, 1);
+    removeDay(state, evt) {
+      state.todo.splice(evt.day, 1);
     },
 
-    updateDate(state, idx: number, evt: any) {
-      // FIXME shouldn't use any
-      state.todo[idx].date = evt;
-      state.todo.splice(idx, 1, state.todo[idx]);
-      console.log(state.todo);
+    updateDayDate(state, evt) {
+      state.todo[evt.day].date = evt.newVal;
     },
 
-    updateTasks(state, idx: number, evt: any) {
-      // FIXME
-      state.todo[idx].tasks[evt.idx][evt.prop] = evt.val;
-      state.todo.splice(idx, 1, state.todo[idx]);
-      console.log(state.todo);
+    addTask(state, evt) {
+      state.todo[evt.day].tasks.push({ state: false, name: "" });
     },
 
-    addTask(state, idx: number) {
-      state.todo[idx].tasks.push({ state: false, name: "" });
+    removeTask(state, evt) {
+      state.todo[evt.day].tasks.splice(evt.task, 1);
     },
 
-    removeTask(state, idx: number, i2: number) {
-      state.todo[idx].tasks.splice(i2, 1);
+    updateTaskState(state, evt) {
+      state.todo[evt.day].tasks[evt.task].state = evt.val;
     },
 
-    saveData(state) {
-      console.log("saving", JSON.stringify(state.todo));
-      localStorage.setItem("todo", JSON.stringify(state.todo));
+    updateTaskName(state, evt) {
+      state.todo[evt.day].tasks[evt.task].name = evt.val;
     },
-
   },
+
+  actions: {
+    saveData(context) {
+      console.log("saving", JSON.stringify(context.getters.todo));
+      localStorage.setItem("todo", JSON.stringify(context.getters.todo));
+    },
+  }
 });
 
-//_.debounce(this.saveData, 500)();
+store.subscribe((mutation, state) => {
+  _.debounce(() => store.dispatch('saveData'), 500)();
+})
 
 export default store;

@@ -5,15 +5,15 @@
       type="checkbox"
       :checked="task.state"
       id="state"
-      @change="$store.commit('updateTaskState', did, id, $event.target.checked)"
+      @change="$store.commit('updateTaskState', { day: did, task: id, val: $event.target.checked })"
     />
     <input
       class="name"
       type="text"
       :value="task.name"
-      @input="$store.commit('updateTaskName', did, id, $event.target.value)"
+      @input="$store.commit('updateTaskName', { day: did, task: id, val: $event.target.value })"
     />
-    <span @click="$store.commit('removeTask', did, id)">&times;</span>
+    <span @click="$store.commit('removeTask', { day: did, task: id })">&times;</span>
   </div>
 </template>
 
