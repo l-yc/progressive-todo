@@ -43,7 +43,7 @@ const store = createStore({
 
       console.log("todo data %o", data);
       for (let a of data) {
-        state.todos.push(a);
+        state.todo.push(a);
       }
     },
 
@@ -92,7 +92,6 @@ const store = createStore({
   },
 });
 
-        console.log("watching", newVal, oldVal);
-        //_.debounce(this.saveData, 500)();
+//_.debounce(this.saveData, 500)();
 
 export default store;

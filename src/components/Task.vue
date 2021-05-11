@@ -5,15 +5,15 @@
       type="checkbox"
       :checked="task.state"
       id="state"
-      @change="$emit('update:task-state', $event.target.checked)"
+      @change="$store.commit('updateTaskState', did, id, $event.target.checked)"
     />
     <input
       class="name"
       type="text"
       :value="task.name"
-      @input="$emit('update:task-name', $event.target.value)"
+      @input="$store.commit('updateTaskName', did, id, $event.target.value)"
     />
-    <span @click="$emit('remove:task')">&times;</span>
+    <span @click="$store.commit('removeTask', did, id)">&times;</span>
   </div>
 </template>
 
@@ -24,7 +24,9 @@ import { Task } from "@/types.ts";
 export default defineComponent({
   name: "Task",
   props: {
-    task: Task,
+    did: { type: Number },
+    id: { type: Number },
+    task: { type: Task },
   },
   methods: {},
 });

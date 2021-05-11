@@ -3,19 +3,15 @@
     <!--<h1>Progressive Todo</h1>-->
     <div class="medium-container">
       <div id="controls">
-        <button @click="addDay()">New day</button>
-        <button @click="carryDay()">Carry over</button>
+        <button @click="$store.commit('addDay')">New day</button>
+        <button @click="$store.commit('carryDay')">Carry over</button>
       </div>
       <div id="board">
         <DayComponent
           v-for="(day, idx) in todo"
           :key="idx"
+          :id="idx"
           :day="day"
-          @remove:day="removeDay(idx)"
-          @update:day-date="updateDate(idx, $event)"
-          @update:day-tasks="updateTasks(idx, $event)"
-          @add:day-tasks="addTask(idx)"
-          @remove:day-tasks="removeTask(idx, $event)"
         />
       </div>
     </div>

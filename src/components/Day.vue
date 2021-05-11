@@ -3,24 +3,19 @@
     <input
       type="date"
       :value="day.date"
-      @input="$emit('update:day-date', $event.target.value)"
+      @input="$store.commit('updateDayDate', id, $event.target.value)"
     />
     <div class="tasks">
       <TaskComponent
         v-for="(task, idx) in day.tasks"
         :key="idx"
+        :did="id"
+        :id="idx"
         :task="task"
-        @update:task-state="
-          $emit('update:day-tasks', { idx, prop: 'state', val: $event })
-        "
-        @update:task-name="
-          $emit('update:day-tasks', { idx, prop: 'name', val: $event })
-        "
-        @remove:task="$emit('remove:day-tasks', idx)"
       />
       <div class="controls flex-row justify-center">
-        <button @click="$emit('add:day-tasks')">New</button>
-        <button @click="$emit('remove:day')">Delete</button>
+        <button @click="$store.commit('addTask', id)">New</button>
+        <button @click="$store.commit('removeDay', id)">Delete</button>
       </div>
     </div>
   </div>
@@ -37,7 +32,8 @@ export default defineComponent({
     TaskComponent,
   },
   props: {
-    day: Day,
+    id: { type: Number },
+    day: { type: Number },
   },
   created() {
     console.log("this.day", this.day);
