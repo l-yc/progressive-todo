@@ -14,6 +14,7 @@
           :key="task.id"
           :did="day.id"
           :task="task"
+          @focusLast="focusLast()"
         />
       </div>
       <div class="controls flex-row justify-center">
@@ -107,6 +108,14 @@ export default defineComponent({
     endRound() {
       this.message = `Round ${this.round} ended. Good job!`;
       this.currentTask = -1;
+    },
+
+    focusLast() {
+      this.$nextTick(() => {
+        let el: HTMLElement = this.$refs.taskContainer as HTMLElement;
+        console.log(el.lastElementChild.querySelector("input"));
+        el.lastElementChild.querySelector("input.name").focus();
+      });
     },
   },
 });

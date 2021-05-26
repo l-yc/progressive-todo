@@ -14,6 +14,7 @@
       "
     />
     <input
+      ref="input"
       class="name"
       type="text"
       :value="task.name"
@@ -23,6 +24,17 @@
           task: task.id,
           val: $event.target.value,
         })
+      "
+      @keydown.enter="
+        $store.commit('addTask', { day: did });
+        $emit('focusLast');
+      "
+      @keydown.delete="
+        if ($event.target.value === '') {
+          $event.preventDefault();
+          $store.commit('removeTask', { day: did, task: task.id });
+          $emit('focusLast');
+        }
       "
     />
     <span @click="$store.commit('removeTask', { day: did, task: task.id })">
