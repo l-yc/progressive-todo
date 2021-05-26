@@ -3,7 +3,9 @@
     <!--<h1>Progressive Todo</h1>-->
     <div class="medium-container">
       <div id="controls">
-        <button @click="toggle">{{ handler === null ? "Start" : "Pause" }}</button>
+        <button @click="toggle">
+          {{ handler === null ? "Start" : "Pause" }}
+        </button>
         <button @click="reset">Reset</button>
         <button @click="log">Log</button>
       </div>
@@ -26,27 +28,33 @@
 import { defineComponent } from "vue";
 import { v4 as uuidv4 } from "uuid";
 
+interface HistoryItem {
+  id: string;
+  name: string;
+  time: number;
+}
+
 export default defineComponent({
   name: "Track",
   components: {},
   data() {
     return {
       elapsed: 0,
-      handler: null,
-      history: [],
+      handler: null as number | null,
+      history: [] as HistoryItem[],
     };
   },
   computed: {
-    timer() {
+    timer(): string {
       return this.formatElapsed(this.elapsed);
-    }
+    },
   },
   created() {
     let json = JSON.parse(localStorage.getItem("track-history") || "[]");
     this.history = json;
   },
   methods: {
-    formatElapsed(elapsed) {
+    formatElapsed(elapsed: number): string {
       let date = new Date(0);
       date.setSeconds(elapsed); // specify value for SECONDS here
       let timeString = date.toISOString().substr(11, 8);
@@ -73,12 +81,12 @@ export default defineComponent({
     log() {
       this.history.unshift({
         id: uuidv4(),
-        name: this.$refs.name.innerText,
+        name: (this.$refs.name as HTMLElement).innerText,
         time: this.elapsed,
-      });
+      } as HistoryItem);
       this.saveData();
     },
-    erase(id) {
+    erase(id: string) {
       let i = -1;
       for (let j = 0; j < this.history.length; ++j) {
         if (this.history[j].id == id) {
